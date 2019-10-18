@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using DatingApp.API.Data;
+using DatingApp.API.Dtos;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,19 +17,19 @@ namespace DatingApp.API.Controllers
 
         }
         [HttpPost("register")]
-        public async Task<IActionResult> Register(string username, string password)
+        public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
             // Validate request
 
-            username = username.ToLower();
-            if(await _Repo.UserExists(username))
+            userForRegisterDto.Username =  userForRegisterDto.Username.ToLower();
+            if(await _Repo.UserExists(userForRegisterDto.Username))
                 return BadRequest("User exists");
             var userToCreate = new User
             {
-                UserName = username
+                UserName = userForRegisterDto.Username
             };
 
-            var createdUser = await _Repo.Register(userToCreate, password);
+            var createdUser = await _Repo.Register(userToCreate, userForRegisterDto.Password);
             return StatusCode(201);
         }
     }

@@ -5,7 +5,7 @@ namespace DatingApp.API.Models
 {
     public class User
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string UserName { get; set; }
         public byte[] passwordHash { get; set; }
         public byte[] passwordSalt { get; set; }
@@ -16,8 +16,9 @@ namespace DatingApp.API.Models
         public DateTime LastActive { get; set; }
         public string Introduction { get; set; }
         public string LookingFor { get; set; }
-        public string Interest { get; set; }
+        public string Interests { get; set; }
         public string City { get; set; }
+        public string Country { get; set; }
         public ICollection<Photo> Photos { get; set; }
     }
 }

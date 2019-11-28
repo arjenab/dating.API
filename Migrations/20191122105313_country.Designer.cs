@@ -3,14 +3,16 @@ using System;
 using DatingApp.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DatingApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191122105313_country")]
+    partial class country
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,15 +25,11 @@ namespace DatingApp.API.Migrations
 
                     b.Property<DateTime>("DateAdded");
 
-                    b.Property<string>("Description");
-
-                    b.Property<bool>("IsMain");
-
-                    b.Property<string>("PublicId");
-
                     b.Property<string>("Url");
 
                     b.Property<int>("UserId");
+
+                    b.Property<bool>("isMain");
 
                     b.HasKey("Id");
 
@@ -42,7 +40,7 @@ namespace DatingApp.API.Migrations
 
             modelBuilder.Entity("DatingApp.API.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("City");
@@ -71,7 +69,7 @@ namespace DatingApp.API.Migrations
 
                     b.Property<byte[]>("passwordSalt");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
                     b.ToTable("Users");
                 });

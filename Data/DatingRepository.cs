@@ -6,6 +6,15 @@ using DatingApp.API.Helpers;
 using DatingApp.API.Models;
 using Microsoft.EntityFrameworkCore;
 
+
+/*  Use your datacontext as your repository
+ *  rename repositories to *Service and put all domain logic there
+ *  split them up to smaller pieces (Single Responsibility) => Like, User, Photo
+ *  (use interfaces and make sure to add them to Dependency Injection (tip: AddScoped))
+ *
+ */
+
+
 namespace DatingApp.API.Data
 {
     public class DatingRepository : IDatingRepository
@@ -16,6 +25,7 @@ namespace DatingApp.API.Data
             _context = context;
 
         }
+        
         public void Add<T>(T entity) where T : class
         {
             _context.Add(entity);

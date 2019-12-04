@@ -23,6 +23,11 @@ namespace DatingApp.API.Controllers
         private readonly IMapper _mapper;
         private readonly IOptions<CloudinarySettings> _cloudinaryConfig;
         private Cloudinary _cloudinary;
+
+        // i would put Cloudinary behind an interface such as IPhotoStore which would have a contract to upload, destroy photo's
+        // that way, its easier to unit test this class
+        // Also configure the dependency injection ;)
+
         public PhotosController(IDatingRepository repo, IMapper mapper, IOptions<CloudinarySettings> cloudinaryConfig)
         {
             _cloudinaryConfig = cloudinaryConfig;
@@ -35,6 +40,9 @@ namespace DatingApp.API.Controllers
             );
             _cloudinary = new Cloudinary(acc);
         }
+
+        // apply route constraints
+        // mark parameters as FromRoute if they are in the actual route url
 
         [HttpGet("{id}", Name = "GetPhoto")]
         public async Task<IActionResult> GetPhoto(int id)
@@ -54,10 +62,9 @@ namespace DatingApp.API.Controllers
             {
                 return Unauthorized();
             }
+
             var userFromRepo = await _repo.GetUser(userId);
-
             var file = photoForCreationDto.File;
-
             var uploadResult = new ImageUploadResult();
 
             if (file.Length > 0)

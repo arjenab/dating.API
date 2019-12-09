@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -6,9 +7,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DatingApp.API.Data;
 using DatingApp.API.Dtos;
+using DatingApp.API.Helpers;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API.Controllers
@@ -18,14 +21,15 @@ namespace DatingApp.API.Controllers
     public class AuthController: ControllerBase
     {
         private readonly IAuthRepository _repo;
-        private readonly IConfiguration _config;
+        private readonly IOptions<AuthOptions> _config;
         private readonly IMapper _mapper;
 
         // its more appropriate to use an IOptions<AuthOptions> instead of passing along the whole IConfiguration
-        public AuthController(IAuthRepository repo, IConfiguration config, IMapper mapper)
+        public AuthController(IAuthRepository repo, IOptions<AuthOptions> config, IMapper mapper)
         {
             _repo = repo;
             _config = config;
+            Console.WriteLine("config value", _config);
             _mapper = mapper;
         }
 
@@ -61,7 +65,7 @@ namespace DatingApp.API.Controllers
             };
             
             var key = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(_config.GetSection("AppSettings:Token").Value));
+                .GetBytes(_config.Value.Token));
             
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 

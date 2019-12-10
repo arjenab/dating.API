@@ -29,7 +29,6 @@ namespace DatingApp.API.Controllers
         {
             _repo = repo;
             _config = config;
-            Console.WriteLine("config value", _config);
             _mapper = mapper;
         }
 

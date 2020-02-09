@@ -18,8 +18,9 @@ namespace DatingApp.API.Data
 
             if(user == null)
                 return null;
-            if(!VerifyPassWordHash(password, user.passwordHash, user.passwordSalt))
-                return null;
+            // if(!VerifyPassWordHash(password, user.passwordHash, user.passwordSalt))
+            //     return null;
+
             return user;
         }
 
@@ -40,8 +41,8 @@ namespace DatingApp.API.Data
         {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            user.passwordHash = passwordHash;
-            user.passwordSalt = passwordSalt;
+            // user.passwordHash = passwordHash;
+            // user.passwordSalt = passwordSalt;
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();

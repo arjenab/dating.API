@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Identity;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Sentry.Extensibility;
 // using Microsoft.OpenApi.Models;
 
 namespace DatingApp.API
@@ -48,7 +49,7 @@ namespace DatingApp.API
             builder.AddRoleValidator<RoleValidator<Role>>();
             builder.AddRoleManager<RoleManager<Role>>();
             builder.AddSignInManager<SignInManager<User>>();
-
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -60,6 +61,12 @@ namespace DatingApp.API
                         ValidateAudience = false
                     };
                 });
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                opt.AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
+                opt.AddPolicy("VIPOnly", policy => policy.RequireRole("VIP"));
+            });
             services.AddControllers(opt =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -81,9 +88,10 @@ namespace DatingApp.API
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.Configure<AuthOptions>(Configuration.GetSection("AppSettings"));
             services.AddAutoMapper(typeof(DatingRepository).Assembly);
-            services.AddScoped<IAuthRepository, AuthRepository>();
+//            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IDatingRepository, DatingRepository>();
             services.AddScoped<LogUserActivity>();
+            
             // services.AddSwaggerGen(c =>
             //     {
             //         c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });

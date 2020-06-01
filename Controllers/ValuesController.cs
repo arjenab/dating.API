@@ -22,7 +22,7 @@ namespace DatingApp.API.Controllers
 
         }
         // GET api/values
-         [AllowAnonymous]
+         [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetValues()
         {
